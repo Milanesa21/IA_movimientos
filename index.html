@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pose Detection with TensorFlow.js BlazePose</title>
+    <title>Deteccion de poses</title>
     <style>
         body {
             display: flex;
@@ -12,25 +12,25 @@
             height: 100vh;
             margin: 0;
             overflow: hidden;
-            position: relative; /* Asegurarse de que los elementos posicionados estén relativos a este */
+            position: relative;
         }
         #container {
             display: flex;
             flex-direction: row;
-            position: relative; /* Permitir posicionar elementos hijos relativos a este */
+            position: relative;
         }
         #video, #canvas {
             border: 1px solid black;
         }
         #message {
             position: absolute;
-            top: 10px; /* Posición inicial por encima de la cámara */
+            top: 10px;
             left: 50%;
             transform: translateX(-50%);
             background-color: rgba(255, 255, 255, 0.8);
             padding: 10px;
             border-radius: 5px;
-            display: none; /* Ocultar el mensaje inicialmente */
+            display: none;
         }
     </style>
 </head>
@@ -38,15 +38,12 @@
     <div id="container">
         <video id="video" width="640" height="480" autoplay></video>
         <canvas id="canvas" width="640" height="480"></canvas>
-        <div id="message"></div> <!-- Elemento para mostrar mensajes -->
+        <div id="message">Detectando...</div>
     </div>
 
-    <!-- Cargar TensorFlow.js -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-    <!-- Cargar BlazePose -->
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection"></script>
-    <!-- Nuestro script -->
     <script src="app.js"></script>
 </body>
 </html>

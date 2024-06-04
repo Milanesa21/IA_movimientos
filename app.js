@@ -23,57 +23,22 @@ async function setupCamera() {
 async function loadModel() {
     console.log('Cargando el modelo de BlazePose...');
     const detectorConfig = {
-        runtime: 'tfjs', // o 'mediapipe' si prefieres usar la versión MediaPipe de BlazePose
-        modelType: 'heavy' // opciones: 'lite', 'full', 'heavy'
+        runtime: 'tfjs',
+        modelType: 'heavy'
     };
     model = await poseDetection.createDetector(poseDetection.SupportedModels.BlazePose, detectorConfig);
     console.log('Modelo de BlazePose cargado exitosamente.');
 }
 
-// Función para detectar poses en cada fotograma de video
-async function detectPose() {
-    const poses = await model.estimatePoses(video);
-    drawPoses(poses);
-    requestAnimationFrame(detectPose);
-}
-
-// Función para dibujar las poses detectadas en el lienzo
-// Función para detectar si las manos están hacia arriba o hacia abajo
-function detectHandDirection(poses) {
-    poses.forEach(pose => {
-        // Comprobar si se detectan las manos
-        if (pose.leftWrist && pose.rightWrist) {
-            const leftHandY = pose.leftWrist.y;
-            const rightHandY = pose.rightWrist.y;
-
-            // Si ambas manos están por encima de los hombros, mostrar mensaje de manos hacia arriba
-            if (leftHandY < pose.leftShoulder.y && rightHandY < pose.rightShoulder.y) {
-                console.log('¡Manos hacia arriba!');
-                // Aquí puedes mostrar un mensaje en la interfaz gráfica
-            }
-            // Si ambas manos están por debajo de los hombros, mostrar mensaje de manos hacia abajo
-            else if (leftHandY > pose.leftShoulder.y && rightHandY > pose.rightShoulder.y) {
-                console.log('¡Manos hacia abajo!');
-                // Aquí puedes mostrar un mensaje en la interfaz gráfica
-            }
-        }
-    });
-}
 
 // Función para dibujar las poses detectadas en el lienzo
 function drawPoses(poses) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Dibujar el humanoide
     poses.forEach(pose => {
-        console.log('Pose detectada:', pose);
         drawHumanoid(pose.keypoints);
-
-        // Detectar dirección de las manos
-        detectHandDirection([pose]);
     });
 }
-
 
 // Función para dibujar un humanoide basado en los puntos clave
 function drawHumanoid(keypoints) {
@@ -115,6 +80,13 @@ async function main() {
     ctx = canvas.getContext('2d');
     await loadModel();
     detectPose();
+}
+
+// Función para detectar poses en cada fotograma de video
+async function detectPose() {
+    const poses = await model.estimatePoses(video);
+    drawPoses(poses);
+    requestAnimationFrame(detectPose);
 }
 
 main(); // Iniciar la aplicación al cargar la página
